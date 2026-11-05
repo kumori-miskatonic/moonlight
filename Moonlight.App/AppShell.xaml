@@ -1,0 +1,11 @@
+<Shell
+    x:Class="Moonlight.App.AppShell"
+    xmlns:local="clr-namespace:Moonlight.App"
+    Title="Moonlight.App">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
