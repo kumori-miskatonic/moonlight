@@ -2,16 +2,16 @@ using Microsoft.Maui.Controls;
 
 [assembly: XmlnsDefinition(
 	"http://schemas.microsoft.com/dotnet/2021/maui",
-	"LocalNotes.App.Views")]
+	"Moonlight.App.Views")]
 
 [assembly: XmlnsDefinition(
 	"http://schemas.microsoft.com/dotnet/2021/maui",
-	"LocalNotes.App.ViewModels")]
+	"Moonlight.App.ViewModels")]
 
 [assembly: XmlnsDefinition(
 	"http://schemas.microsoft.com/dotnet/2021/maui",
-	"LocalNotes.App.Models")]
+	"Moonlight.App.Models")]
 
 [assembly: XmlnsDefinition(
 	"http://schemas.microsoft.com/dotnet/2021/maui",
-	"LocalNotes.App.Data")]
+	"Moonlight.App.Data")]
