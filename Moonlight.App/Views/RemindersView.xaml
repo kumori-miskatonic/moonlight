@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+	x:Class="Moonlight.App.Views.RemindersView"
+	x:DataType="RemindersViewModel"
+	Title="LiteDB Notes">
+
+	<Grid
+		Padding="20"
+		RowDefinitions="Auto,Auto,Auto,Auto,*"
+		RowSpacing="12">
+
+		<Label
+			Grid.Row="0"
+			Text="Reminders"
+			FontAttributes="Bold"
+			FontSize="28"
+			SemanticProperties.HeadingLevel="Level1" />
+
+		<Entry
+			Grid.Row="1"
+			AutomationId="LiteDbNoteEntry"
+			Text="{Binding DraftText, Mode=TwoWay}"
+			Placeholder="Enter a reminder..."
+			MaxLength="500"
+			ReturnType="Done" />
+
+		<Grid
+			Grid.Row="2"
+			ColumnDefinitions="*,*,*"
+			ColumnSpacing="8">
+			<Button
+				Grid.Column="0"
+				AutomationId="SaveNoteButton"
+				Text="Save note"
+				Command="{Binding SaveCommand}" />
+			<Button
+				Grid.Column="1"
+				AutomationId="LiteDbNewNoteButton"
+				Text="New"
+				Command="{Binding NewNoteCommand}" />
+			<Button
+				Grid.Column="2"
+				AutomationId="LiteDbDeleteNoteButton"
+				Text="Delete"
+				Command="{Binding DeleteCommand}" />
+		</Grid>
+
+		<Grid
+			Grid.Row="3"
+			ColumnDefinitions="*,Auto"
+			ColumnSpacing="12">
+			<Label
+				VerticalOptions="Center"
+				Text="{Binding StatusMessage}"
+				LineBreakMode="WordWrap" />
+			<ActivityIndicator
+				Grid.Column="1"
+				IsRunning="{Binding IsBusy}"
+				IsVisible="{Binding IsBusy}" />
+		</Grid>
+
+		<CollectionView
+			Grid.Row="4"
+			AutomationId="LiteDbNotesList"
+			ItemsSource="{Binding Notes}"
+			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
+			SelectionMode="Single">
+			<CollectionView.EmptyView>
+				<Label
+					Text="Saved LiteDB notes will appear here."
+					HorizontalOptions="Center"
+					VerticalOptions="Center" />
+			</CollectionView.EmptyView>
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="LiteDbNote">
+					<Border
+						Margin="0,4"
+						Padding="12"
+						Stroke="{AppThemeBinding Light=#B8B8B8, Dark=#666666}"
+						StrokeShape="RoundRectangle 6"
+						StrokeThickness="1">
+						<Grid RowDefinitions="Auto,Auto" RowSpacing="4">
+							<Label
+								Text="{Binding Text}"
+								FontSize="17"
+								LineBreakMode="WordWrap" />
+							<Label
+								Grid.Row="1"
+								Text="{Binding CreatedAtUtc, StringFormat='Saved {0:u}'}"
+								FontSize="12"
+								Opacity="0.75" />
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+	</Grid>
+</ContentPage>

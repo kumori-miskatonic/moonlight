@@ -1,6 +1,8 @@
 using SQLite;
 using Moonlight.App.Models;
 
+namespace Moonlight.App.Data;
+
 public sealed class SQLiteDatabase
 {
     private readonly SQLiteAsyncConnection _database;
@@ -38,4 +40,3 @@ public sealed class SQLiteDatabase
         return _database.DeleteAsync(reminder);
     }
 }
-
