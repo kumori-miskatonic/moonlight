@@ -1,94 +1,184 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
 	x:Class="Moonlight.App.Views.RemindersView"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	x:DataType="RemindersViewModel"
-	Title="LiteDB Notes">
-
+	Title="Reminders"
+	Background="{AppThemeBinding Light=#F7F5FC, Dark=#17151D}">
 	<Grid
-		Padding="20"
-		RowDefinitions="Auto,Auto,Auto,Auto,*"
-		RowSpacing="12">
-
-		<Label
-			Grid.Row="0"
-			Text="Reminders"
-			FontAttributes="Bold"
-			FontSize="28"
-			SemanticProperties.HeadingLevel="Level1" />
-
-		<Entry
-			Grid.Row="1"
-			AutomationId="LiteDbNoteEntry"
-			Text="{Binding DraftText, Mode=TwoWay}"
-			Placeholder="Enter a reminder..."
-			MaxLength="500"
-			ReturnType="Done" />
-
-		<Grid
-			Grid.Row="2"
-			ColumnDefinitions="*,*,*"
-			ColumnSpacing="8">
-			<Button
-				Grid.Column="0"
-				AutomationId="SaveNoteButton"
-				Text="Save note"
-				Command="{Binding SaveCommand}" />
-			<Button
-				Grid.Column="1"
-				AutomationId="LiteDbNewNoteButton"
-				Text="New"
-				Command="{Binding NewNoteCommand}" />
-			<Button
-				Grid.Column="2"
-				AutomationId="LiteDbDeleteNoteButton"
-				Text="Delete"
-				Command="{Binding DeleteCommand}" />
-		</Grid>
-
-		<Grid
-			Grid.Row="3"
-			ColumnDefinitions="*,Auto"
-			ColumnSpacing="12">
+		Padding="20,18"
+		RowDefinitions="Auto,Auto,Auto,*"
+		RowSpacing="14">
+		<VerticalStackLayout Grid.Row="0" Spacing="4">
 			<Label
-				VerticalOptions="Center"
+				Text="Reminders"
+				FontAttributes="Bold"
+				FontSize="32"
+				TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}"
+				SemanticProperties.HeadingLevel="Level1" />
+			<Label
+				Text="One step at a time. Your reminders stay on this device."
+				FontSize="16"
+				TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
+		</VerticalStackLayout>
+
+		<Border
+			Grid.Row="1"
+			Padding="16"
+			Background="{AppThemeBinding Light=#FFFFFF, Dark=#24212B}"
+			Stroke="{AppThemeBinding Light=#D8D1E4, Dark=#494452}"
+			StrokeShape="RoundRectangle 16">
+			<VerticalStackLayout Spacing="12">
+				<Label
+					Text="Add a reminder"
+					FontAttributes="Bold"
+					FontSize="21"
+					TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}"
+					SemanticProperties.HeadingLevel="Level2" />
+				<Entry
+					AutomationId="ReminderTextEntry"
+					Text="{Binding DraftText, Mode=TwoWay}"
+					Placeholder="What would you like to remember?"
+					MaxLength="300"
+					FontSize="18"
+					PlaceholderColor="{AppThemeBinding Light=#6B6475, Dark=#D1C9DC}"
+					ReturnType="Done"
+					SemanticProperties.Description="Reminder details" />
+				<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+					<VerticalStackLayout Spacing="4">
+						<Label
+							Text="Date"
+							FontSize="15"
+							TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
+						<DatePicker
+							AutomationId="ReminderDatePicker"
+							Date="{Binding DueDate}"
+							FontSize="17"
+							Format="ddd, MMM d"
+							SemanticProperties.Description="Reminder date" />
+					</VerticalStackLayout>
+					<VerticalStackLayout Grid.Column="1" Spacing="4">
+						<Label
+							Text="Time"
+							FontSize="15"
+							TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
+						<TimePicker
+							AutomationId="ReminderTimePicker"
+							Time="{Binding DueTime}"
+							FontSize="17"
+							SemanticProperties.Description="Reminder time" />
+					</VerticalStackLayout>
+				</Grid>
+				<Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+					<HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+						<CheckBox
+							IsChecked="{Binding IsImportant}"
+							SemanticProperties.Description="Mark this reminder as important" />
+						<Label
+							Text="Important"
+							FontSize="16"
+							VerticalTextAlignment="Center"
+							TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}" />
+					</HorizontalStackLayout>
+					<Button
+						Grid.Column="1"
+						AutomationId="AddReminderButton"
+						Text="Add reminder"
+						FontAttributes="Bold"
+						FontSize="16"
+						MinimumHeightRequest="52"
+						Padding="18,12"
+						Command="{Binding AddReminderCommand}" />
+				</Grid>
+			</VerticalStackLayout>
+		</Border>
+
+		<Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="10">
+			<Label
+				AutomationId="ReminderStatus"
 				Text="{Binding StatusMessage}"
-				LineBreakMode="WordWrap" />
+				FontSize="15"
+				VerticalTextAlignment="Center"
+				TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
 			<ActivityIndicator
 				Grid.Column="1"
 				IsRunning="{Binding IsBusy}"
-				IsVisible="{Binding IsBusy}" />
+				IsVisible="{Binding IsBusy}"
+				SemanticProperties.Description="Loading reminders" />
 		</Grid>
 
 		<CollectionView
-			Grid.Row="4"
-			AutomationId="LiteDbNotesList"
-			ItemsSource="{Binding Notes}"
-			SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
-			SelectionMode="Single">
+			Grid.Row="3"
+			AutomationId="RemindersList"
+			ItemsSource="{Binding Reminders}"
+			SelectionMode="None">
 			<CollectionView.EmptyView>
-				<Label
-					Text="Saved LiteDB notes will appear here."
+				<VerticalStackLayout
+					Padding="16"
+					Spacing="10"
 					HorizontalOptions="Center"
-					VerticalOptions="Center" />
+					VerticalOptions="Center">
+					<Label
+						Text="Nothing on your list yet"
+						FontAttributes="Bold"
+						FontSize="21"
+						HorizontalTextAlignment="Center"
+						TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}" />
+					<Label
+						Text="Add a reminder above. You can change it or mark it done anytime."
+						FontSize="16"
+						HorizontalTextAlignment="Center"
+						TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
+				</VerticalStackLayout>
 			</CollectionView.EmptyView>
 			<CollectionView.ItemTemplate>
-				<DataTemplate x:DataType="LiteDbNote">
+				<DataTemplate x:DataType="Reminder">
 					<Border
-						Margin="0,4"
+						Margin="0,0,0,10"
 						Padding="12"
-						Stroke="{AppThemeBinding Light=#B8B8B8, Dark=#666666}"
-						StrokeShape="RoundRectangle 6"
-						StrokeThickness="1">
-						<Grid RowDefinitions="Auto,Auto" RowSpacing="4">
-							<Label
-								Text="{Binding Text}"
-								FontSize="17"
-								LineBreakMode="WordWrap" />
-							<Label
-								Grid.Row="1"
-								Text="{Binding CreatedAtUtc, StringFormat='Saved {0:u}'}"
-								FontSize="12"
-								Opacity="0.75" />
+						Background="{AppThemeBinding Light=#FFFFFF, Dark=#24212B}"
+						Stroke="{AppThemeBinding Light=#D8D1E4, Dark=#494452}"
+						StrokeShape="RoundRectangle 14">
+						<Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+							<CheckBox
+								Grid.Column="0"
+								IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+								VerticalOptions="Center"
+								SemanticProperties.Description="{Binding Text, StringFormat='Mark {0} as complete'}"
+								CheckedChanged="OnReminderCheckedChanged" />
+							<VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+								<Label
+									Text="{Binding Text}"
+									FontAttributes="Bold"
+									FontSize="18"
+									LineBreakMode="WordWrap"
+									TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}"
+									SemanticProperties.HeadingLevel="Level3" />
+								<Label
+									Text="{Binding Due, StringFormat='Due {0:g}'}"
+									FontSize="15"
+									TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
+								<Label
+									Text="Important"
+									IsVisible="{Binding IsImportant}"
+									FontAttributes="Bold"
+									FontSize="14"
+									TextColor="{AppThemeBinding Light=#8A3D12, Dark=#FFC58F}"
+									SemanticProperties.Description="Important reminder" />
+							</VerticalStackLayout>
+							<Button
+								Grid.Column="2"
+								Text="Delete"
+								FontSize="14"
+								Padding="10,8"
+								Background="#8A2635"
+								TextColor="White"
+								VerticalOptions="Center"
+								AutomationId="DeleteReminderButton"
+								SemanticProperties.Hint="Deletes this reminder"
+								Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteReminderCommand}"
+								CommandParameter="{Binding}" />
 						</Grid>
 					</Border>
 				</DataTemplate>

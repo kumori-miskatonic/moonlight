@@ -6,37 +6,40 @@ namespace Moonlight.App.Data;
 public sealed class SQLiteDatabase
 {
     private readonly SQLiteAsyncConnection _database;
+    private readonly Task _initialization;
 
     public SQLiteDatabase(string dbPath)
     {
         _database = new SQLiteAsyncConnection(dbPath);
-        _database.CreateTableAsync<Reminder>().Wait();
+        _initialization = _database.CreateTableAsync<Reminder>();
     }
 
-    public Task<List<Reminder>> GetRemindersAsync()
+    public async Task<List<Reminder>> GetRemindersAsync()
     {
-        return _database.Table<Reminder>().ToListAsync();
+        await _initialization;
+        return await _database.Table<Reminder>()
+            .OrderBy(reminder => reminder.IsCompleted)
+            .ThenBy(reminder => reminder.Due)
+            .ToListAsync();
     }
 
-    public Task<Reminder> GetReminderAsync(int id)
+    public async Task<Reminder?> GetReminderAsync(int id)
     {
-        return _database.Table<Reminder>().Where(i => i.Id == id).FirstOrDefaultAsync();
+        await _initialization;
+        return await _database.Table<Reminder>().Where(reminder => reminder.Id == id).FirstOrDefaultAsync();
     }
 
-    public Task<int> SaveReminderAsync(Reminder reminder)
+    public async Task<int> SaveReminderAsync(Reminder reminder)
     {
-        if (reminder.Id != 0)
-        {
-            return _database.UpdateAsync(reminder);
-        }
-        else
-        {
-            return _database.InsertAsync(reminder);
-        }
+        await _initialization;
+        return reminder.Id != 0
+            ? await _database.UpdateAsync(reminder)
+            : await _database.InsertAsync(reminder);
     }
 
-    public Task<int> DeleteReminderAsync(Reminder reminder)
+    public async Task<int> DeleteReminderAsync(Reminder reminder)
     {
-        return _database.DeleteAsync(reminder);
+        await _initialization;
+        return await _database.DeleteAsync(reminder);
     }
 }

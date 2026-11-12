@@ -1,5 +1,7 @@
-﻿<Application xmlns:local="clr-namespace:Moonlight.App"
-             x:Class="Moonlight.App.App">
+﻿<Application
+    x:Class="Moonlight.App.App"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

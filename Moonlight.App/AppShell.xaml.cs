@@ -2,8 +2,14 @@
 
 public partial class AppShell : Shell
 {
-	public AppShell()
+	public AppShell(Views.RemindersView remindersView)
 	{
 		InitializeComponent();
+		Items.Add(new ShellContent
+		{
+			Title = "Reminders",
+			Route = "Reminders",
+			Content = remindersView
+		});
 	}
 }
