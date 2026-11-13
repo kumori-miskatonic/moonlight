@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moonlight.App.Data;
+using Moonlight.App.Services;
 using Moonlight.App.ViewModels;
 using Moonlight.App.Views;
+using Plugin.LocalNotification;
 
 #if MAUI_DEVFLOW
 using Microsoft.Maui.DevFlow.Agent;
@@ -16,6 +18,7 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseLocalNotification()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -28,6 +31,7 @@ public static class MauiProgram
 
 		var databasePath = Path.Combine(FileSystem.AppDataDirectory, "moonlight.db3");
 		builder.Services.AddSingleton(_ => new SQLiteDatabase(databasePath));
+		builder.Services.AddSingleton<IReminderNotificationService, ReminderNotificationService>();
 		builder.Services.AddTransient<RemindersViewModel>();
 		builder.Services.AddTransient<RemindersView>();
 		builder.Services.AddTransient<AppShell>();

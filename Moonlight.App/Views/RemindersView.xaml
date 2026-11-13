@@ -18,7 +18,7 @@
 				TextColor="{AppThemeBinding Light=#241A38, Dark=#F7F3FF}"
 				SemanticProperties.HeadingLevel="Level1" />
 			<Label
-				Text="One step at a time. Your reminders stay on this device."
+				Text="One step at a time. Allow notifications for timed alerts on this device."
 				FontSize="16"
 				TextColor="{AppThemeBinding Light=#514763, Dark=#D1C9DC}" />
 		</VerticalStackLayout>
